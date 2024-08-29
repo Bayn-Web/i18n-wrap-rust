@@ -1,12 +1,7 @@
 #![allow(clippy::print_stdout)]
-use std::{
-    env,
-    path::Path,
-};
-use wrap::wrap::{
-    Wrap,
-    WrapConfig,
-};
+mod wrap;
+use std::path::PathBuf;
+use wrap::{Wrap, WrapConfig};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user_root_path = String::from("test_projects/event");
@@ -14,9 +9,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user_language_path = String::from("src/languages/index.ts");
     let user_include = vec![String::from("src")];
     let user_exclude = vec![String::from("src/languages")];
+    wrap(
+        user_root_path,
+        user_language_path,
+        user_include,
+        user_exclude,
+    )
+}
 
+pub fn wrap(
+    user_root_path: String,
+    user_language_path: String,
+    user_include: Vec<String>,
+    user_exclude: Vec<String>,
+) -> Result<(), Box<dyn std::error::Error>> {
     // 根路径
-    let root = Path::new(env::current_dir().unwrap().as_path()).join(user_root_path);
+    let root = PathBuf::from(user_root_path.as_str());
     if !root.exists() {
         println!("根路径不存在");
         return Ok(());
